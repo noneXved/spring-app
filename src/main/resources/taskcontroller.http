@@ -1,0 +1,26 @@
+POST http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+  "description": "The really hard task",
+  "done": false
+}
+
+###
+
+POST http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+  "description": "It is my a new task",
+  "done": true
+}
+
+###
+
+GET http://localhost:8080/tasks/3
+
+
+###
+
+GET http://localhost:8080/tasks

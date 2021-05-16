@@ -6,13 +6,14 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tasks")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Task {
+public class Task extends Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,4 +22,16 @@ public class Task {
     private String description;
     private boolean done;
 
+    private LocalDateTime deadline;
+
+    @ManyToOne
+    private TaskGroup group;
+
+
+    public void updateFrom(final Task source) {
+        description = source.description;
+        done = source.done;
+        deadline = source.deadline;
+        group = source.group;
+    }
 }
