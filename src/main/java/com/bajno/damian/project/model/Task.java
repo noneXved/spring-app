@@ -13,20 +13,24 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Task extends Audit {
+public class Task {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @NotBlank(message = "Task's description must be not empty")
+    @NotBlank(message = "Task's description must not be empty")
     private String description;
     private boolean done;
-
     private LocalDateTime deadline;
-
+    @Embedded
+    private Audit audit = new Audit();
     @ManyToOne
+    @JoinColumn(name = "task_group_id")
     private TaskGroup group;
 
+    public Task(String description, LocalDateTime deadline) {
+        this.description = description;
+        this.deadline = deadline;
+    }
 
     public void updateFrom(final Task source) {
         description = source.description;

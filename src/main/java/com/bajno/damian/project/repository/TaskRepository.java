@@ -15,12 +15,12 @@ public interface TaskRepository {
 
     Optional<Task> findById(Long id);
 
-    Task save(Task task);
-
     boolean existsById(Long id);
 
-    boolean existsByDoneIsFalseAndGroupId(Long groupId);
+    boolean existsByDoneIsFalseAndGroup_Id(Long groupId);
 
-    List<Task> findByDone(@Param("state") boolean done);
+    List<Task> findByDone(boolean done);
+
+    Task save(Task entity);
 
 }

@@ -13,6 +13,6 @@ interface SQLTaskRepository extends TaskRepository, JpaRepository<Task, Long> {
     boolean existsById(@Param("id") Long id);
 
     @Override
-    boolean existsByDoneIsFalseAndGroupId(Long groupId);
+    boolean existsByDoneIsFalseAndGroup_Id(Long groupId);
 
 }

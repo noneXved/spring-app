@@ -9,22 +9,21 @@ import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
-@Table(name = "task_groups")
 @Getter
 @Setter
 @NoArgsConstructor
-public class TaskGroup {
+@Table(name = "projects")
+public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotBlank(message = "Task group's description must not be empty")
+    @NotBlank(message = "Project's description must not be empty")
     private String description;
-    private boolean done;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "group")
-    private Set<Task> tasks;
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @OneToMany(mappedBy = "project")
+    private Set<TaskGroup> groups;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    private Set<ProjectStep> steps;
+
 
 
 }
