@@ -5,9 +5,7 @@ import com.bajno.damian.project.model.TaskGroup;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,7 +26,5 @@ public class GroupReadModel {
         tasks = source.getTasks().stream()
                       .map(GroupTaskReadModel::new)
                       .collect(Collectors.toSet());
-
-
     }
 }
