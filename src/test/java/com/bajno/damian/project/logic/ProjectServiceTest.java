@@ -12,12 +12,17 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -34,7 +39,7 @@ class ProjectServiceTest {
         var toTest = new ProjectService(null, mockGroupRepository, mockConfig);
 
         // when
-        var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0L));
+        var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0));
 
         // then
         assertThat(exception)
@@ -47,14 +52,14 @@ class ProjectServiceTest {
     void createGroup_configurationOk_And_noProjects_throwsIllegalArgumentException() {
         // given
         var mockRepository = mock(ProjectRepository.class);
-        when(mockRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(mockRepository.findById(anyInt())).thenReturn(Optional.empty());
         // and
         TaskConfigurationProperties mockConfig = configurationReturning(true);
         // system under test
         var toTest = new ProjectService(mockRepository, null, mockConfig);
 
         // when
-        var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0L));
+        var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0));
 
         // then
         assertThat(exception)
@@ -67,7 +72,7 @@ class ProjectServiceTest {
     void createGroup_noMultipleGroupsConfig_And_noUndoneGroupExists_noProjects_throwsIllegalArgumentException() {
         // given
         var mockRepository = mock(ProjectRepository.class);
-        when(mockRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(mockRepository.findById(anyInt())).thenReturn(Optional.empty());
         // and
         TaskGroupRepository mockGroupRepository = groupRepositoryReturning(false);
         // and
@@ -76,7 +81,7 @@ class ProjectServiceTest {
         var toTest = new ProjectService(mockRepository, mockGroupRepository, mockConfig);
 
         // when
-        var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0L));
+        var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0));
 
         // then
         assertThat(exception)
@@ -92,7 +97,7 @@ class ProjectServiceTest {
         // and
         var project = projectWith("bar", Set.of(-1, -2));
         var mockRepository = mock(ProjectRepository.class);
-        when(mockRepository.findById(anyLong()))
+        when(mockRepository.findById(anyInt()))
                 .thenReturn(Optional.of(project));
         // and
         InMemoryGroupRepository inMemoryGroupRepo = inMemoryGroupRepository();
@@ -103,11 +108,12 @@ class ProjectServiceTest {
         var toTest = new ProjectService(mockRepository, inMemoryGroupRepo, mockConfig);
 
         // when
-        GroupReadModel result = toTest.createGroup(today, 1L);
+        GroupReadModel result = toTest.createGroup(today, 1);
 
         // then
         assertThat(result.getDescription()).isEqualTo("bar");
         assertThat(result.getDeadline()).isEqualTo(today.minusDays(1));
+        assertThat(result.getTasks()).allMatch(task -> task.getDescription().equals("foo"));
         assertThat(countBeforeCall + 1).isEqualTo(inMemoryGroupRepo.count());
     }
 
@@ -127,13 +133,13 @@ class ProjectServiceTest {
 
     private TaskGroupRepository groupRepositoryReturning(final boolean result) {
         var mockGroupRepository = mock(TaskGroupRepository.class);
-        when(mockGroupRepository.existsByDoneIsFalseAndProject_Id(anyLong())).thenReturn(result);
+        when(mockGroupRepository.existsByDoneIsFalseAndProject_Id(anyInt())).thenReturn(result);
         return mockGroupRepository;
     }
 
     private TaskConfigurationProperties configurationReturning(final boolean result) {
         var mockTemplate = mock(TaskConfigurationProperties.Template.class);
-        when(mockTemplate.isAllowMultipleTask()).thenReturn(result);
+        when(mockTemplate.isAllowMultipleTasks()).thenReturn(result);
         var mockConfig = mock(TaskConfigurationProperties.class);
         when(mockConfig.getTemplate()).thenReturn(mockTemplate);
         return mockConfig;
@@ -144,8 +150,8 @@ class ProjectServiceTest {
     }
 
     private static class InMemoryGroupRepository implements TaskGroupRepository {
-        private Long index = 0L;
-        private Map<Long, TaskGroup> map = new HashMap<>();
+        private int index = 0;
+        private Map<Integer, TaskGroup> map = new HashMap<>();
 
         int count() {
             return map.values().size();
@@ -157,7 +163,7 @@ class ProjectServiceTest {
         }
 
         @Override
-        public Optional<TaskGroup> findById(Long id) {
+        public Optional<TaskGroup> findById(final Integer id) {
             return Optional.ofNullable(map.get(id));
         }
 
@@ -177,13 +183,10 @@ class ProjectServiceTest {
         }
 
         @Override
-        public boolean existsByDoneIsFalseAndProject_Id(Long projectId) {
+        public boolean existsByDoneIsFalseAndProject_Id(final Integer projectId) {
             return map.values().stream()
                       .filter(group -> !group.isDone())
                       .anyMatch(group -> group.getProject() != null && group.getProject().getId() == projectId);
         }
-
-
-
     }
 }

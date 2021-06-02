@@ -4,9 +4,11 @@ package com.bajno.damian.project.controller;
 import com.bajno.damian.project.config.TaskConfigurationProperties;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/info")
 public class InfoController {
     private TaskConfigurationProperties taskConfigurationProperties;
     private DataSourceProperties dataSource;
@@ -16,14 +18,14 @@ public class InfoController {
         this.dataSource = dataSource;
     }
 
-    @GetMapping("/info/url")
+    @GetMapping("/url")
     public String displayUrl() {
         return dataSource.getUrl();
     }
 
 
-    @GetMapping("/info/prop")
+    @GetMapping("/prop")
     public boolean isProp() {
-        return taskConfigurationProperties.getTemplate().isAllowMultipleTask();
+        return taskConfigurationProperties.getTemplate().isAllowMultipleTasks();
     }
 }

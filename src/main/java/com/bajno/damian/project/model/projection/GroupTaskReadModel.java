@@ -1,17 +1,30 @@
 package com.bajno.damian.project.model.projection;
 
 import com.bajno.damian.project.model.Task;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class GroupTaskReadModel {
     private String description;
     private boolean done;
 
-    public GroupTaskReadModel(Task source) {
+    GroupTaskReadModel(Task source) {
         description = source.getDescription();
         done = source.isDone();
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(final boolean done) {
+        this.done = done;
+    }
 }
+

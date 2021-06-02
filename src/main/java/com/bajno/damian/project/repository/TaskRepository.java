@@ -13,14 +13,16 @@ public interface TaskRepository {
 
     Page<Task> findAll(Pageable page);
 
-    Optional<Task> findById(Long id);
+    Optional<Task> findById(Integer id);
 
-    boolean existsById(Long id);
+    boolean existsById(Integer id);
 
-    boolean existsByDoneIsFalseAndGroup_Id(Long groupId);
+    boolean existsByDoneIsFalseAndGroup_Id(Integer groupId);
 
     List<Task> findByDone(boolean done);
 
     Task save(Task entity);
+
+    List<Task> findAllByGroup_Id(Integer groupId);
 
 }

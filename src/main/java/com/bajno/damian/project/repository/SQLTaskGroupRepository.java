@@ -8,12 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SQLTaskGroupRepository extends TaskGroupRepository, JpaRepository<TaskGroup, Long> {
+interface SqlTaskGroupRepository extends TaskGroupRepository, JpaRepository<TaskGroup, Integer> {
     @Override
     @Query("select distinct g from TaskGroup g join fetch g.tasks")
     List<TaskGroup> findAll();
 
     @Override
-    boolean existsByDoneIsFalseAndProject_Id(Long projectId);
-
+    boolean existsByDoneIsFalseAndProject_Id(Integer projectId);
 }

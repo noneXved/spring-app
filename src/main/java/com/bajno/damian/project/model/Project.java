@@ -1,22 +1,15 @@
 package com.bajno.damian.project.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
 @Table(name = "projects")
 public class Project {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     @NotBlank(message = "Project's description must not be empty")
     private String description;
     @OneToMany(mappedBy = "project")
@@ -24,6 +17,38 @@ public class Project {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
     private Set<ProjectStep> steps;
 
+    public Project() {
+    }
 
+    public int getId() {
+        return id;
+    }
 
+    void setId(final int id) {
+        this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    void setDescription(final String description) {
+        this.description = description;
+    }
+
+    Set<TaskGroup> getGroups() {
+        return groups;
+    }
+
+    void setGroups(final Set<TaskGroup> groups) {
+        this.groups = groups;
+    }
+
+    public Set<ProjectStep> getSteps() {
+        return steps;
+    }
+
+    void setSteps(final Set<ProjectStep> steps) {
+        this.steps = steps;
+    }
 }
