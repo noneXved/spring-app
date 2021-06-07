@@ -1,6 +1,5 @@
 package com.bajno.damian.project.controller;
 
-
 import com.bajno.damian.project.config.TaskConfigurationProperties;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,23 +8,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/info")
-public class InfoController {
-    private TaskConfigurationProperties taskConfigurationProperties;
+class InfoController {
     private DataSourceProperties dataSource;
+    private TaskConfigurationProperties myProp;
 
-    public InfoController(TaskConfigurationProperties taskConfigurationProperties, DataSourceProperties dataSource) {
-        this.taskConfigurationProperties = taskConfigurationProperties;
+    InfoController(final DataSourceProperties dataSource, final TaskConfigurationProperties myProp) {
         this.dataSource = dataSource;
+        this.myProp = myProp;
     }
 
     @GetMapping("/url")
-    public String displayUrl() {
+    String url() {
         return dataSource.getUrl();
     }
 
-
     @GetMapping("/prop")
-    public boolean isProp() {
-        return taskConfigurationProperties.getTemplate().isAllowMultipleTasks();
+    boolean myProp() {
+        return myProp.getTemplate().isAllowMultipleTasks();
     }
 }

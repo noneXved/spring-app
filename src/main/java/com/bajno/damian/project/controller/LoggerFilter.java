@@ -12,7 +12,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-
 @Component
 class LoggerFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(LoggerFilter.class);

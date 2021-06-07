@@ -4,6 +4,7 @@ import com.bajno.damian.project.model.Task;
 import com.bajno.damian.project.model.TaskGroup;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,12 +21,13 @@ public class GroupReadModel {
         id = source.getId();
         description = source.getDescription();
         source.getTasks().stream()
-              .map(Task::getDeadline)
-              .max(LocalDateTime::compareTo)
-              .ifPresent(date -> deadline = date);
+                .map(Task::getDeadline)
+                .filter(Objects::nonNull)
+                .max(LocalDateTime::compareTo)
+                .ifPresent(date -> deadline = date);
         tasks = source.getTasks().stream()
-                      .map(GroupTaskReadModel::new)
-                      .collect(Collectors.toSet());
+                .map(GroupTaskReadModel::new)
+                .collect(Collectors.toSet());
     }
 
     public int getId() {

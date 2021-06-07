@@ -1,6 +1,5 @@
 package com.bajno.damian.project.model;
 
-
 import javax.persistence.Embeddable;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;

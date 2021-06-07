@@ -1,5 +1,6 @@
 package com.bajno.damian.project.model.projection;
 
+
 import com.bajno.damian.project.model.Task;
 
 public class GroupTaskReadModel {
@@ -27,4 +28,3 @@ public class GroupTaskReadModel {
         this.done = done;
     }
 }
-
